@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Sing-box Config Generator</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <style>
+            body {
+                font-family: "Segoe UI", Tahoma, sans-serif;
+                background: #f4f4f4;
+                padding: 20px;
+                font-size: 16px;
+                color: #333;
+            }
+            h1 {
+                margin-bottom: 15px;
+                font-size: 26px;
+                text-align: center;
+                color: #333;
+            }
+            .section {
+                background: #fff;
+                padding: 20px;
+                margin-bottom: 20px;
+                border-radius: 8px;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+            }
+            label {
+                display: block;
+                margin: 10px 0 6px;
+                font-weight: 500;
+            }
+            input,
+            select,
+            button,
+            textarea {
+                padding: 10px;
+                width: 100%;
+                box-sizing: border-box;
+                font-size: 15px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                outline: none;
+                transition: 0.2s;
+            }
+            input:focus,
+            select:focus,
+            textarea:focus {
+                border-color: #4caf50;
+                box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+            }
+            .protocols {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .protocols button {
+                flex: 1;
+                min-width: 100px;
+                padding: 10px;
+                font-size: 15px;
+                border: 1px solid #ccc;
+                background: #f8f8f8;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: 0.2s;
+            }
+            .protocols button:hover {
+                background: #e8e8e8;
+            }
+            .protocols button.active {
+                background: #4caf50;
+                color: #fff;
+                border-color: #4caf50;
+            }
+            textarea {
+                height: 220px;
+                font-family: monospace;
+                font-size: 14px;
+                resize: vertical;
+            }
+            .btn-row {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            .btn-row button {
+                flex: 1;
+                font-size: 15px;
+                font-weight: 500;
+                padding: 10px;
+                background: #4caf50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .btn-row button:hover {
+                background: #45a049;
+            }
+            .btn-secondary {
+                background: #2196f3;
+            }
+            .btn-secondary:hover {
+                background: #1976d2;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Sing-box Config Generator</h1>
+
+        <div class="section">
+            <label>Protocol</label>
+            <div class="protocols" id="protoSelect">
+                <button data-proto="vmess" class="active">VMess</button>
+                <button data-proto="vless">VLESS</button>
+                <button data-proto="trojan">Trojan</button>
+                <button data-proto="shadowsocks">Shadowsocks</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <label>Tag (Alias)</label>
+            <input type="text" id="tag" placeholder="My Server" />
+
+            <label>Server Address</label>
+            <input type="text" id="server" placeholder="example.com" />
+
+            <label>Port</label>
+            <input type="number" id="port" placeholder="443" />
+
+            <div id="uuidSection">
+                <label>UUID / Password</label>
+                <input type="text" id="id" />
+            </div>
+
+            <div id="ssMethodSection" style="display: none">
+                <label>Shadowsocks Method</label>
+                <select id="ssMethod">
+                    <option>chacha20-ietf-poly1305</option>
+                    <option>aes-128-gcm</option>
+                    <option>aes-256-gcm</option>
+                </select>
+            </div>
+
+            <div id="tlsSection">
+                <label>TLS Enabled</label>
+                <select id="tlsEnabled">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+
+                <label>SNI</label>
+                <input type="text" id="sni" placeholder="example.com" />
+            </div>
+        </div>
+
+        <div class="section">
+            <label>SOCKS Listen Address</label>
+            <input type="text" id="inAddr" value="127.0.0.1" />
+
+            <label>SOCKS Listen Port</label>
+            <input type="number" id="inPort" value="1080" />
+        </div>
+
+        <div class="section btn-row">
+            <button id="generateBtn">Generate</button>
+            <button id="copyBtn" class="btn-secondary">Copy</button>
+            <button id="downloadBtn" class="btn-secondary">Download</button>
+        </div>
+
+        <div class="section">
+            <label>Generated Config</label>
+            <textarea id="output" readonly></textarea>
+        </div>
+
+        <script>
+            $(function () {
+                let proto = "vmess";
+
+                $("#protoSelect").on("click", "button", function () {
+                    proto = $(this).data("proto");
+                    $("#protoSelect button").removeClass("active");
+                    $(this).addClass("active");
+
+                    if (proto === "shadowsocks") {
+                        $("#ssMethodSection").show();
+                        $("#tlsSection").hide();
+                    } else {
+                        $("#ssMethodSection").hide();
+                        $("#tlsSection").show();
+                    }
+                });
+
+                $("#generateBtn").click(function () {
+                    const tag = $("#tag").val() || "proxy";
+                    const server = $("#server").val();
+                    const port = parseInt($("#port").val());
+                    const id = $("#id").val();
+                    const sni = $("#sni").val();
+                    const tlsEnabled = $("#tlsEnabled").val() === "true";
+                    const inAddr = $("#inAddr").val();
+                    const inPort = parseInt($("#inPort").val());
+
+                    if (!server || !port || !id) {
+                        alert("Please fill all required fields.");
+                        return;
+                    }
+
+                    let outbound = { tag, server, server_port: port };
+
+                    if (proto === "vmess") {
+                        outbound.type = "vmess";
+                        outbound.uuid = id;
+                        outbound.security = "auto";
+                        outbound.tls = {
+                            enabled: tlsEnabled,
+                            server_name: sni,
+                        };
+                    } else if (proto === "vless") {
+                        outbound.type = "vless";
+                        outbound.uuid = id;
+                        outbound.tls = {
+                            enabled: tlsEnabled,
+                            server_name: sni,
+                        };
+                    } else if (proto === "trojan") {
+                        outbound.type = "trojan";
+                        outbound.password = id;
+                        outbound.tls = {
+                            enabled: tlsEnabled,
+                            server_name: sni,
+                        };
+                    } else if (proto === "shadowsocks") {
+                        outbound.type = "shadowsocks";
+                        outbound.method = $("#ssMethod").val();
+                        outbound.password = id;
+                    }
+
+                    const config = {
+                        log: { level: "info" },
+                        inbounds: [
+                            {
+                                type: "socks",
+                                tag: "socks-in",
+                                listen: inAddr,
+                                listen_port: inPort,
+                                sniff: true,
+                                sniff_override_destination: true,
+                            },
+                        ],
+                        outbounds: [
+                            outbound,
+                            { type: "direct", tag: "direct" },
+                            { type: "block", tag: "block" },
+                        ],
+                    };
+
+                    $("#output").val(JSON.stringify(config, null, 2));
+                });
+
+                $("#copyBtn").click(function () {
+                    const text = $("#output").val();
+                    if (!text) return;
+                    navigator.clipboard
+                        .writeText(text)
+                        .then(() => alert("Copied!"));
+                });
+
+                $("#downloadBtn").click(function () {
+                    const text = $("#output").val();
+                    if (!text) return;
+                    const blob = new Blob([text], { type: "application/json" });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "singbox_config.json";
+                    a.click();
+                    URL.revokeObjectURL(url);
+                });
+            });
+        </script>
+    </body>
+</html>

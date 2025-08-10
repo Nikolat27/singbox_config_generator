@@ -1,0 +1,268 @@
+:root {
+    --bg: #0f172a;
+    --panel: #0b1222;
+    --muted: #9aa8bf;
+    --text: #e6edf7;
+    --primary: #5b9cff;
+    --primary-2: #3e7ef5;
+    --ok: #22c55e;
+    --warn: #f59e0b;
+    --err: #ef4444;
+    --border: #1e293b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Inter, system-ui, Arial, sans-serif;
+    background: linear-gradient(
+        120deg,
+        #0b1020,
+        #111a33 50%,
+        #0b1020
+    );
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+}
+
+.wrap {
+    width: 960px;
+    max-width: 100%;
+}
+
+.card {
+    background: rgba(13, 22, 43, 0.78);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Header Styles */
+.app-header h1 {
+    margin: 0 0 16px;
+    font-size: 24px;
+    letter-spacing: 0.2px;
+}
+
+.sub {
+    margin-top: -6px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* Section Styles */
+.protocol-section {
+    margin-top: 14px;
+}
+
+.common-fields,
+.tls-section,
+.inbound-section,
+.actions-section,
+.output-section {
+    margin-top: 12px;
+}
+
+/* Layout Components */
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.row3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+}
+
+/* Form Elements */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+label {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: #0a1326;
+    color: var(--text);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.15s ease;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--primary);
+}
+
+.inline {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.inline input {
+    flex: 1;
+}
+
+/* Segmented Controls */
+.seg {
+    display: inline-flex;
+    background: #0a1326;
+    border: 1px solid var(--border);
+    padding: 4px;
+    border-radius: 12px;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.seg button {
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.seg button.active {
+    background: var(--primary);
+}
+
+/* Utility Classes */
+.help {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: -4px;
+}
+
+.divider {
+    height: 1px;
+    background: var(--border);
+    margin: 18px 0;
+}
+
+.badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+}
+
+.error {
+    color: var(--err);
+    font-size: 12px;
+    margin-top: 4px;
+    display: none;
+}
+
+/* Buttons */
+.actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    border: 0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    transition: transform 0.05s ease, background 0.2s ease;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.primary {
+    background: var(--primary);
+    color: #fff;
+}
+
+.primary:hover {
+    background: var(--primary-2);
+}
+
+.ghost {
+    background: #0a1326;
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.ok {
+    background: var(--ok);
+    color: #05130a;
+}
+
+.warn {
+    background: var(--warn);
+    color: #1b1002;
+}
+
+/* Output Area */
+.out {
+    background: #0b1020;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 12px;
+    max-height: 360px;
+    overflow: auto;
+    font-size: 13px;
+}
+
+/* Toast Notifications */
+.toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #0a1326;
+    border: 1px solid var(--border);
+    color: var(--text);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.25s ease;
+    pointer-events: none;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 860px) {
+    .row,
+    .row3 {
+        grid-template-columns: 1fr;
+    }
+} 
