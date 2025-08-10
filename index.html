@@ -3,8 +3,9 @@
     <head>
         <meta charset="UTF-8" />
         <title>Sing-box Config Generator</title>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="jquery.min.js"></script>
         <link rel="stylesheet" href="styles.css" />
+        <link rel="icon" type="image/x-icon" href="./images.png" />
     </head>
     <body>
         <h1>Sing-box Config Generator</h1>
@@ -36,18 +37,89 @@
 
             <div id="ssMethodSection" style="display: none">
                 <label>Shadowsocks Encryption Method</label>
-                <input type="text" id="ssMethod" placeholder="chacha20-ietf-poly1305" />
+                <input
+                    type="text"
+                    id="ssMethod"
+                    placeholder="chacha20-ietf-poly1305"
+                />
             </div>
 
             <div id="tlsSection">
-                <label>TLS Enabled</label>
-                <select id="tlsEnabled">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
+                <label>Security Type</label>
+                <select id="securityType">
+                    <option value="tls">TLS</option>
+                    <option value="reality">Reality</option>
+                    <option value="none">None</option>
                 </select>
 
-                <label>SNI</label>
-                <input type="text" id="sni" placeholder="example.com" />
+                <label>Network Type</label>
+                <select id="networkType">
+                    <option value="tcp">TCP</option>
+                    <option value="xhttp">xHTTP</option>
+                    <option value="ws">WebSocket</option>
+                </select>
+
+                <div id="tlsSettings">
+                    <label>TLS Enabled</label>
+                    <select id="tlsEnabled">
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+
+                    <label>SNI</label>
+                    <input type="text" id="sni" placeholder="example.com" />
+                </div>
+
+                <div id="realitySettings" style="display: none">
+                    <label>Server Name</label>
+                    <input
+                        type="text"
+                        id="realityServerName"
+                        placeholder="Google.com"
+                    />
+
+                    <label>Fingerprint</label>
+                    <select id="realityFingerprint">
+                        <option value="chrome">Chrome</option>
+                        <option value="firefox">Firefox</option>
+                        <option value="safari">Safari</option>
+                        <option value="edge">Edge</option>
+                        <option value="360">360</option>
+                        <option value="qq">QQ</option>
+                        <option value="random">Random</option>
+                        <option value="randomized">Randomized</option>
+                    </select>
+
+                    <label>Public Key</label>
+                    <input
+                        type="text"
+                        i
+                        d="realityPublicKey"
+                        placeholder="sa5RHNjAAD3hYv4OU_YYU08gRUsmPs5JdZES5Xy3pn8"
+                    />
+
+                    <label>Short ID</label>
+                    <input
+                        type="text"
+                        id="realityShortId"
+                        placeholder="61e683d41fdb"
+                    />
+
+                    <label>Spider X</label>
+                    <input type="text" id="realitySpiderX" placeholder="/" />
+                </div>
+
+                <div id="xhttpSettings" style="display: none">
+                    <label>Path</label>
+                    <input type="text" id="xhttpPath" placeholder="/path" />
+
+                    <label>Mode</label>
+                    <select id="xhttpMode">
+                        <option value="auto">Auto</option>
+                        <option value="get">GET</option>
+                        <option value="post">POST</option>
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -63,6 +135,7 @@
             <button id="generateBtn">Generate</button>
             <button id="copyBtn" class="btn-secondary">Copy</button>
             <button id="downloadBtn" class="btn-secondary">Download</button>
+            <button id="clearBtn" class="btn-secondary">Clear</button>
         </div>
 
         <div class="section">
