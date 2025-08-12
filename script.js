@@ -5,10 +5,8 @@ if (typeof jQuery === 'undefined') {
     $(document).ready(function() {
     let proto = "vmess";
 
-                    $("#protoSelect").on("click", "button", function () {
-                    proto = $(this).data("proto");
-                    $("#protoSelect button").removeClass("active");
-                    $(this).addClass("active");
+                    $("#protoSelect").change(function () {
+                    proto = $(this).val();
 
                     if (proto === "shadowsocks") {
                         $("#ssMethodSection").show();
@@ -213,8 +211,7 @@ if (typeof jQuery === 'undefined') {
         
         // Reset protocol selection to VMess
         proto = "vmess";
-        $("#protoSelect button").removeClass("active");
-        $("#protoSelect button[data-proto='vmess']").addClass("active");
+        $("#protoSelect").val("vmess");
         
         // Show TLS section and hide other sections
         $("#tlsSection").show();

@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Sing-box Config Generator</title>
         <script src="jquery.min.js"></script>
         <link rel="stylesheet" href="styles.css" />
@@ -12,12 +13,12 @@
 
         <div class="section">
             <label>Protocol</label>
-            <div class="protocols" id="protoSelect">
-                <button data-proto="vmess" class="active">VMess</button>
-                <button data-proto="vless">VLESS</button>
-                <button data-proto="trojan">Trojan</button>
-                <button data-proto="shadowsocks">Shadowsocks</button>
-            </div>
+            <select id="protoSelect">
+                <option value="vmess">VMess</option>
+                <option value="vless">VLESS</option>
+                <option value="trojan">Trojan</option>
+                <option value="shadowsocks">Shadowsocks</option>
+            </select>
         </div>
 
         <div class="section">
